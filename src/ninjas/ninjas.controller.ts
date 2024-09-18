@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateNinjaDto } from './dto/create-ninja.dto';
+import { NinjasService } from './ninjas.service';
 
 @Controller('ninjas')
 export class NinjasController {
+  constructor(private readonly ninjaService: NinjasService) {}
   @Get(':id')
   getOneNinja(@Param('id') id: string) {
     return { id };
@@ -12,5 +14,9 @@ export class NinjasController {
     return {
       name: createNinjaDto.name,
     };
+  }
+  @Get()
+  getNinjas(@Query('weapon') weapon: 'stars' | 'nunchucks') {
+    return this.ninjaService.getNinjas(weapon);
   }
 }
